@@ -1,22 +1,26 @@
 import { Between } from "typeorm";
 import { Tarefa } from "../models/Tarefa";
 import promptSync from 'prompt-sync';
+import { Usuario } from "../models/Usuario";
 const prompt = promptSync();
 
 export class TarefaController{
 
-  async create(descricao: string, prazo: string, categoriasIdcategoria: number, usuariosIdcriador: number, usuariosIdexecutor: number){
+  async create(descricao: string, prazo: string, categoriasIdcategoria: number, usuariosIdcriador: number, usuariosIdexecutor: number): Promise<Tarefa>{
+    let usuarioExecutor: Usuario | null = await Usuario.findOneBy({ id: usuariosIdcriador });
 
-    let tarefa = await Tarefa.create({
+    if (! usuarioExecutor) {
+      throw new Error('Cliente não encontrado!');
+    }
+
+     return  await Tarefa.create({
       descricao: descricao,
       prazo: prazo,
       categorias_idcategoria: categoriasIdcategoria,
       usuarios_idcriador: usuariosIdcriador,
       usuarios_idexecutor: usuariosIdexecutor
-
     }).save();
 
-    console.log(`Tarefa ID #${tarefa.id} criado com sucesso!`)
   }
 
   async list (){
