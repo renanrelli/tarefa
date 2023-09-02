@@ -25,7 +25,7 @@ async function menuLogin(){
     input = prompt('Selecione a opção desejada:');
     if(input == '1'){
       let login = await usuarioController.login();
-      if (login == true){
+      if (login){
         await menu();
       } else{
         console.log('Usuário ou senha incorretos');

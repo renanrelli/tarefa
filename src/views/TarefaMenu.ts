@@ -26,7 +26,7 @@ export class TarefaMenu{
   public async execute (input: string) {
     switch (input) {
       case '9':
-        // await this.create();
+        await this.create();
         break;
       case '10':
         // await this.list();
@@ -34,6 +34,10 @@ export class TarefaMenu{
       case '11':
 
     }
+  }
+
+  private async create(){
+
   }
 
 }

@@ -5,17 +5,15 @@ const prompt = promptSync();
 
 export class TarefaController{
 
-  async create(){
-    let descricao: string = prompt('Descrição: ')
-    let categorias_idcategoria: number = Number(prompt('Categoria: 1 - Trabalho, 2 - Estudo, 3 - Moradia, 4 - Startup: '))
-    let prazo: string = prompt('Digite o prazo: aaaa-mm-dd: ')
-    let situacao: string = prompt('Digite a situação: A (à fazer), F (fazendo), C (concluída) ou I (inativa): ');
+  async create(descricao: string, prazo: string, categoriasIdcategoria: number, usuariosIdcriador: number, usuariosIdexecutor: number){
 
     let tarefa = await Tarefa.create({
-      descricao,
-      categorias_idcategoria,
-      prazo,
-      situacao,
+      descricao: descricao,
+      prazo: prazo,
+      categorias_idcategoria: categoriasIdcategoria,
+      usuarios_idcriador: usuariosIdcriador,
+      usuarios_idexecutor: usuariosIdexecutor
+
     }).save();
 
     console.log(`Tarefa ID #${tarefa.id} criado com sucesso!`)

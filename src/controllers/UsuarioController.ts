@@ -5,11 +5,11 @@ const prompt = promptSync();
 
 export class UsuarioController{
 
-  async login(): Promise<boolean>{
+  async login(): Promise<Usuario|null>{
     const emailUsuario = prompt('Digite seu email:');
     const senhaUsuario = prompt('Digite sua senha:');
 
-    let loginOk = await Usuario.find({
+    let loginOk = await Usuario.findOne({
       where: {
           email: emailUsuario,
           senha: senhaUsuario,
@@ -17,10 +17,10 @@ export class UsuarioController{
       },
   })
 
-  if(loginOk.length >= 1){
-    return true
+  if(loginOk){
+    return loginOk
   } else{
-    return false
+    return null
   }
 
   }
