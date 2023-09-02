@@ -47,7 +47,6 @@ export class UsuarioController{
 
   async list (): Promise<Usuario[]>{
     return await Usuario.find();
-
   }
 
   async find(id: number): Promise<Usuario|null>{

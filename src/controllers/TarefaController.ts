@@ -32,27 +32,32 @@ export class TarefaController{
 
   }
 
-  async list (){
-    let tarefas = await Tarefa.find();
-    console.table(tarefas);
-    return;
+  async list (): Promise<Tarefa[]>{
+    return await Tarefa.find();
   }
 
-  async edit(){
-    let id = Number(prompt('Qual o ID?'));
-    let tarefa: Tarefa | null = await Tarefa.findOneBy({id: id});
+  async find(id: number): Promise<Tarefa|null>{
+    return await Tarefa.findOneBy({id})
+  }
 
-    if(tarefa){
-      tarefa.descricao = prompt(`Descricao (${tarefa.descricao}):`);
-      tarefa.categorias_idcategoria = Number(prompt(`ID da categoria (${tarefa.categoria})`));
-      tarefa.prazo = prompt(`Prazo (${tarefa.prazo}):`);
-      tarefa.situacao = prompt(`Situação: (${tarefa.situacao}) A (à fazer), F (fazendo), C (concluída) ou I (inativa')`).toUpperCase();
-      await tarefa.save();
-      console.log('Tarefa atualizado com sucesso!')
-    } else {
-      console.log('Tarefa não encontrado!');
+  async edit(tarefa: Tarefa, descricao: string, prazo: string, idCategoria: number, idExecutor: number): Promise<Tarefa>{
+    let categoria: Categoria | null = await Categoria.findOneBy({ id: idCategoria });
+    let executor: Usuario | null = await Usuario.findOneBy({ id: idExecutor });
 
+    if (! categoria) {
+      throw new Error('Categoria não encontrada!');
     }
+    if(! executor){
+      throw new Error('Executor não encontrado')
+    }
+
+    tarefa.descricao = descricao;
+    tarefa.prazo = prazo;
+    tarefa.categorias_idcategoria = idCategoria;
+    tarefa.usuarios_idexecutor = idExecutor;
+    tarefa.save()
+    return tarefa;
+
   };
 
   async delete(){

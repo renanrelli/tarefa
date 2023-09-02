@@ -35,9 +35,13 @@ export class TarefaMenu{
         await this.create();
         break;
       case '10':
-        // await this.list();
+        await this.list();
         break;
       case '11':
+        await this.edit();
+        break;
+      case '12':
+
 
     }
   }
@@ -51,7 +55,25 @@ export class TarefaMenu{
     let idExecutor = Number(prompt('Digite o ID do usuário para executar a tarefa: '))
 
     let tarefa: Tarefa = await this.controller.create(descricao, prazo, idCategoria, this.usuarioLogin, idExecutor);
+  }
 
+  private async list(): Promise<void>{
+    let tarefas: Tarefa[] = await this.controller.list();
+    console.log(tarefas);
+  }
+
+  private async edit(){
+    let id: number = Number(prompt('Qual é o ID?'))
+    let tarefa = await this.controller.find(id)
+
+    if(tarefa){
+    let descricao = prompt(`Descrição (${tarefa.descricao}): `);
+    let prazo = prompt(`Prazo (${tarefa.prazo}) aaaa-mm-dd: `)
+    let idCategoria = Number(prompt(`ID da categoria (${tarefa.categorias_idcategoria}): `))
+    let idExecutor = Number(prompt(`ID do executor (${tarefa.usuarios_idexecutor}): `))
+    await this.controller.edit(tarefa, descricao, prazo, idCategoria, idExecutor)
+
+    }
   }
 
 }

@@ -55,7 +55,6 @@ private async edit(): Promise<void>{
 
   if(categoria){
     let descricao = prompt(`Descrição (${categoria.descricao}):`);
-
     categoria = await this.controller.edit(categoria, descricao)
     console.log(`Usuário ID #${categoria.id} atualizado com sucesso`);
 
