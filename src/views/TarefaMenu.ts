@@ -37,6 +37,12 @@ export class TarefaMenu{
   }
 
   private async create(){
+    let descricao = prompt('Digite a descrição da tarefa: ')
+    let prazo = prompt('Informe o prazo da tarefa (aaaa-mm-dd): ')
+    let idCategoria = Number(prompt('Digite o ID da categoria: '))
+    let idExecutor = Number(prompt('Digite o ID do usuário para executar a tarefa: '))
+
+    let tarefa: Tarefa = await this.controller.create(descricao,prazo,idCategoria,idExecutor);
 
   }
 

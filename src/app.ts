@@ -4,6 +4,7 @@ import db from './db';
 import { CategoriaMenu } from "./views/CategoriaMenu";
 import { UsuarioController } from './controllers/UsuarioController';
 import { UsuarioMenu } from './views/UsuarioMenu';
+import { TarefaController } from './controllers/TarefaController';
 
 async function main():Promise<void>{
 
@@ -15,6 +16,7 @@ main()
 async function menuLogin(){
   let input: string = '';
   let usuarioController = new UsuarioController();
+  let tarefaController = new TarefaController();
 
   do{
     console.clear();
@@ -26,6 +28,7 @@ async function menuLogin(){
     if(input == '1'){
       let login = await usuarioController.login();
       if (login){
+        await tarefaController.usuarioLogado(login)
         await menu();
       } else{
         console.log('Usuário ou senha incorretos');

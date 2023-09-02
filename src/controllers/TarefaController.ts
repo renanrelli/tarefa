@@ -6,18 +6,29 @@ const prompt = promptSync();
 
 export class TarefaController{
 
-  async create(descricao: string, prazo: string, categoriasIdcategoria: number, usuariosIdcriador: number, usuariosIdexecutor: number): Promise<Tarefa>{
-    let usuarioExecutor: Usuario | null = await Usuario.findOneBy({ id: usuariosIdcriador });
+  private usuarioLogin: Usuario;
+
+  async usuarioLogado(user: Usuario){
+    this.usuarioLogin =  user;
+  }
+
+  async create(descricao: string, prazo: string, categoriasIdcategoria: number, usuariosIdexecutor: number): Promise<Tarefa>{
+    let usuarioExecutor: Usuario | null = await Usuario.findOneBy({ id: usuariosIdexecutor });
 
     if (! usuarioExecutor) {
-      throw new Error('Cliente não encontrado!');
+      throw new Error('ID do usuário executor não encontrado!');
     }
 
+    let tarefa: Tarefa | null = await Tarefa.findOneBy({id: categoriasIdcategoria})
+
+    if(!tarefa){
+      throw new Error('ID da categoria não encontrado')
+    }
      return  await Tarefa.create({
       descricao: descricao,
       prazo: prazo,
       categorias_idcategoria: categoriasIdcategoria,
-      usuarios_idcriador: usuariosIdcriador,
+      usuarios_idcriador: this.usuarioLogin.id,
       usuarios_idexecutor: usuariosIdexecutor
     }).save();
 
