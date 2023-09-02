@@ -1,9 +1,14 @@
+import { hash } from "bcrypt";
+import bcrypt from 'bcrypt';
 import { Usuario } from "../models/Usuario";
 
 import promptSync from 'prompt-sync';
 const prompt = promptSync();
 
+
 export class UsuarioController{
+
+  public usuarioLogin: Usuario | null;
 
   async login(): Promise<Usuario|null>{
     const emailUsuario = prompt('Digite seu email:');
@@ -12,23 +17,29 @@ export class UsuarioController{
     let loginOk = await Usuario.findOne({
       where: {
           email: emailUsuario,
-          senha: senhaUsuario,
           situacao: 'A'
       },
-  })
+    })
 
-  if(loginOk){
-    return loginOk
-  } else{
-    return null
-  }
-
+    if(loginOk){
+      const match = await bcrypt.compare(senhaUsuario, loginOk.senha);
+      if(match){
+        this.usuarioLogin = loginOk
+        return loginOk
+      }else {
+        return null
+      }
+    } else{
+      return null
+    }
   }
 
   async create(nome: string, senha: string, email: string, situacao: string){
+    const passwordHash = await hash(senha, 8);
+
     return await Usuario.create({
       nome,
-      senha,
+      senha: passwordHash,
       email,
       situacao
     }).save();
@@ -45,7 +56,7 @@ export class UsuarioController{
 
   async edit(usuario: Usuario, nome: string, senha: string, email: string): Promise<Usuario>{
     usuario.nome = nome,
-    usuario.senha = senha,
+    usuario.senha = await hash(senha, 8),
     usuario.email = email,
     await usuario.save()
     return usuario

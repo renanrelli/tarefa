@@ -21,6 +21,7 @@ async function menu(){
   let usuarioMenu: UsuarioMenu = new UsuarioMenu();
   let tarefaMenu: TarefaMenu = new TarefaMenu();
 
+
   do{
     console.clear()
     console.log('0 - Sair');
