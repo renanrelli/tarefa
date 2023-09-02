@@ -5,6 +5,12 @@ import { TarefaController } from "../controllers/TarefaController";
 
 export class TarefaMenu{
 
+  private usuarioLogin: number;
+
+  async idUsuarioLogado(id: number){
+    this.usuarioLogin = id;
+  }
+
   public controller: TarefaController;
 
   constructor(){
@@ -37,12 +43,14 @@ export class TarefaMenu{
   }
 
   private async create(){
+    console.log(this.usuarioLogin);
+
     let descricao = prompt('Digite a descrição da tarefa: ')
     let prazo = prompt('Informe o prazo da tarefa (aaaa-mm-dd): ')
     let idCategoria = Number(prompt('Digite o ID da categoria: '))
     let idExecutor = Number(prompt('Digite o ID do usuário para executar a tarefa: '))
 
-    let tarefa: Tarefa = await this.controller.create(descricao, prazo, idCategoria, idExecutor);
+    let tarefa: Tarefa = await this.controller.create(descricao, prazo, idCategoria, this.usuarioLogin, idExecutor);
 
   }
 

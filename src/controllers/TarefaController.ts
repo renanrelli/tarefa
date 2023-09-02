@@ -7,14 +7,8 @@ const prompt = promptSync();
 
 export class TarefaController{
 
-  public usuarioLogin: Usuario;
+  async create(descricao: string, prazo: string, categoriasIdcategoria: number,usuariosIdCriador: number, usuariosIdexecutor: number): Promise<Tarefa>{
 
-  async usuarioLogado(user: Usuario){
-    this.usuarioLogin = user;
-  }
-
-  async create(descricao: string, prazo: string, categoriasIdcategoria: number, usuariosIdexecutor: number): Promise<Tarefa>{
-    console.log(this.usuarioLogin);
     let usuarioExecutor: Usuario | null = await Usuario.findOneBy({ id: usuariosIdexecutor });
 
     if (! usuarioExecutor) {
@@ -26,11 +20,12 @@ export class TarefaController{
     if(!categoria){
       throw new Error('ID da categoria não encontrado')
     }
+
      return await Tarefa.create({
       descricao: descricao,
       prazo: prazo,
       categorias_idcategoria: categoriasIdcategoria,
-      // usuarios_idcriador: this.usuarioLogin.id,
+      usuarios_idcriador: usuariosIdCriador,
       usuarios_idexecutor: usuariosIdexecutor,
       situacao: 'A'
     }).save();
