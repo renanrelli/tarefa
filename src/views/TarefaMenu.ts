@@ -42,7 +42,7 @@ export class TarefaMenu{
     let idCategoria = Number(prompt('Digite o ID da categoria: '))
     let idExecutor = Number(prompt('Digite o ID do usuário para executar a tarefa: '))
 
-    let tarefa: Tarefa = await this.controller.create(descricao,prazo,idCategoria,idExecutor);
+    let tarefa: Tarefa = await this.controller.create(descricao, prazo, idCategoria, idExecutor);
 
   }
 

@@ -2,8 +2,9 @@ import promptSync from 'prompt-sync';
 const prompt = promptSync();
 import db from './db';
 import { CategoriaMenu } from "./views/CategoriaMenu";
-import { UsuarioController } from './controllers/UsuarioController';
+import { TarefaMenu } from "./views/TarefaMenu";
 import { UsuarioMenu } from './views/UsuarioMenu';
+import { UsuarioController } from './controllers/UsuarioController';
 import { TarefaController } from './controllers/TarefaController';
 
 async function main():Promise<void>{
@@ -43,17 +44,21 @@ async function menuLogin(){
 async function menu(){
   let categoriaMenu: CategoriaMenu = new CategoriaMenu();
   let usuarioMenu: UsuarioMenu = new UsuarioMenu();
+  let tarefaMenu: TarefaMenu = new TarefaMenu();
+
   let input: string = '';
   do{
     console.clear();
     usuarioMenu.show()
     categoriaMenu.show()
+    tarefaMenu.show()
     console.log('0 - Sair');
     input = prompt('Selecione a opção desejada:');
 
     if(input != '0'){
       await usuarioMenu.execute(input)
       await categoriaMenu.execute(input)
+      await tarefaMenu.execute(input)
       prompt('Pressione qualquer tecla para continuar:')
     }
   }

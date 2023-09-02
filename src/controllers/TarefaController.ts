@@ -2,34 +2,37 @@ import { Between } from "typeorm";
 import { Tarefa } from "../models/Tarefa";
 import promptSync from 'prompt-sync';
 import { Usuario } from "../models/Usuario";
+import { Categoria } from "../models/Categoria";
 const prompt = promptSync();
 
 export class TarefaController{
 
-  private usuarioLogin: Usuario;
+  public usuarioLogin: Usuario;
 
   async usuarioLogado(user: Usuario){
-    this.usuarioLogin =  user;
+    this.usuarioLogin = user;
   }
 
   async create(descricao: string, prazo: string, categoriasIdcategoria: number, usuariosIdexecutor: number): Promise<Tarefa>{
+    console.log(this.usuarioLogin);
     let usuarioExecutor: Usuario | null = await Usuario.findOneBy({ id: usuariosIdexecutor });
 
     if (! usuarioExecutor) {
       throw new Error('ID do usuário executor não encontrado!');
     }
 
-    let tarefa: Tarefa | null = await Tarefa.findOneBy({id: categoriasIdcategoria})
+    let categoria: Categoria | null = await Categoria.findOneBy({id: categoriasIdcategoria})
 
-    if(!tarefa){
+    if(!categoria){
       throw new Error('ID da categoria não encontrado')
     }
-     return  await Tarefa.create({
+     return await Tarefa.create({
       descricao: descricao,
       prazo: prazo,
       categorias_idcategoria: categoriasIdcategoria,
-      usuarios_idcriador: this.usuarioLogin.id,
-      usuarios_idexecutor: usuariosIdexecutor
+      // usuarios_idcriador: this.usuarioLogin.id,
+      usuarios_idexecutor: usuariosIdexecutor,
+      situacao: 'A'
     }).save();
 
   }
